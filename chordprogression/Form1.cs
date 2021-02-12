@@ -354,16 +354,17 @@ namespace chordprogression
                 buttonList[i].BackColor = SystemColors.Control;
             }
         }
-        private void set(string chordName) //  アルゴリズム選択
+        public void set(string chordName) //  アルゴリズム選択
         {
             Array.Clear(genreProperty, 0, genreProperty.Length);
             if (partCheck == 1 && chordList.Count > 1) //多重推定を適用　chordList.Count 要らない？
             {
+                //MessageBox.Show("set !!");
                 partCheckAlgorithm(partCheckingList);
                 //chordSet();
                 //searchChord(chordName);
             }
-            else//直前のコードだけを対象としてコードを推薦
+            else//直前のコードだけを対象としてコードを推薦(単純推定)
             {
                 chordSet();
                 searchChord(chordName);
@@ -452,7 +453,7 @@ namespace chordprogression
 
         }
 
-        public void partCheckingRecommend(ref List<string> partCheckingList)
+        public void partCheckingRecommend(ref List<string> partCheckingList) //多重推定を適用
         {
             ChordRecommendAlgorithm chordRecommendAlgorithm = new ChordRecommendAlgorithm();
             chordRecommendAlgorithm.multipleRecommend(this, ref partCheckingList);
@@ -1451,7 +1452,17 @@ namespace chordprogression
             richTextBox1.Clear();
         }
 
+        private void melodyInputButton_Click(object sender, EventArgs e) //メロディー認識によるコード推薦(実装予定)
+        {
+            /*
+            Dictionary<string, int> recommendChordByMelody;
+            MelodyToChordForCsharp.Logic logic = new MelodyToChordForCsharp.Logic();
+            logic.Setting();
+            recommendChordByMelody = logic.main();
+            */
+            
 
+        }
     }
 }
 

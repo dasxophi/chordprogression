@@ -335,7 +335,10 @@ namespace chordprogression
                 }
                 else
                 {
-                    MessageBox.Show("推薦できるコードが存在しません。");
+                    MessageBox.Show("多重推定で推薦できるコードが存在しません。\n単純推定を適用します。");
+                    form1.chordSet();
+                    //form1.searchChord(form1.chordList.Peek());
+                    form1.searchChord(form1.chordSoundList2.Last());
                 }
 
             }
