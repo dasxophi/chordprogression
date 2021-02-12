@@ -38,7 +38,6 @@ namespace chordprogression
 
         public ExcelWorksheet worksheet;
 
-
         public dynamic xlsxFile;
         public dynamic package;
 
@@ -58,6 +57,9 @@ namespace chordprogression
         public int RangeColumsCount;
         public int PartCheckingListCount;
 
+        int threadflag = 0; // 1=スレッド実行中
+        public Dictionary<string, int> recommendChordByMelody;
+        int recommendChordByMelodyCount = 0;
         public Form1()
         {
             InitializeComponent();
@@ -1452,16 +1454,42 @@ namespace chordprogression
             richTextBox1.Clear();
         }
 
-        private void melodyInputButton_Click(object sender, EventArgs e) //メロディー認識によるコード推薦(実装予定)
+        void MelodyToChordFunc()
         {
-            /*
-            Dictionary<string, int> recommendChordByMelody;
             MelodyToChordForCsharp.Logic logic = new MelodyToChordForCsharp.Logic();
             logic.Setting();
             recommendChordByMelody = logic.main();
-            */
-            
 
+            foreach (KeyValuePair<string, int> a in recommendChordByMelody)
+            {
+                enteredMelodyText.AppendText(a.Key + " " + a.Value + "Point ");
+                recommendChordByMelodyCount++;
+            }
+            threadflag = 0;
+        }
+
+        private void melodyInputButton_Click(object sender, EventArgs e) //メロディー認識によるコード推薦(実装予定)
+        {
+            if (threadflag == 0)
+            {
+                MessageBox.Show("メロディーを入力してください");
+                Thread thread = new Thread(MelodyToChordFunc);
+                threadflag = 1;
+                thread.Start();
+
+            }
+
+        }
+
+        private void clearMelodyButton_Click(object sender, EventArgs e)
+        {
+
+            if(recommendChordByMelodyCount > 0)
+            {
+                recommendChordByMelody.Clear();
+                enteredMelodyText.Clear();
+            }
+            
         }
     }
 }
