@@ -44,7 +44,7 @@ namespace chordprogression
                     }
                     if (count == mainChords.Length)
                     {
-                        MessageBox.Show("部分的検査アルゴリズムを適用します。");
+                        MessageBox.Show("多重推定アルゴリズムを適用します。");
                         
                         StreamWriter configText = new StreamWriter("./config.txt", true);
                         configText.WriteLine("partCheck = 1");
