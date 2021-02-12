@@ -155,7 +155,7 @@ namespace chordprogression
                     }
                     else
                     {
-                        //MessageBox.Show("部分的検査によって集まったスタックの一番目は " + partCheckingList[0]);
+                        //MessageBox.Show("多重推定によって集まったスタックの一番目は " + partCheckingList[0]);
                         string chord = form1.chordSoundList2[i];
                         partCheckingList.Add(chord);
                         //MessageBox.Show("最後のコードです。");
@@ -197,7 +197,7 @@ namespace chordprogression
                     }
                     else
                     {
-                        //MessageBox.Show("部分的検査によって集まったスタックの一番目は " + partCheckingList[0]);
+                        //MessageBox.Show("多重推定によって集まったスタックの一番目は " + partCheckingList[0]);
                         string chord = form1.chordSoundList2[i];
                         partCheckingList.Add(chord);
                         //MessageBox.Show("最後のコードです。");
@@ -207,11 +207,11 @@ namespace chordprogression
                 }
             }
 
-            //MessageBox.Show("部分的検査を一部終了しました。今からコード推薦を行います。");
+            //MessageBox.Show("多重推定を一部終了しました。今からコード推薦を行います。");
 
             if (partCheckingList.Count == 0)
             {
-                MessageBox.Show("部分的検査で推薦できるコードが存在しません。\r\n単純推薦を行います。");
+                MessageBox.Show("多重推定で推薦できるコードが存在しません。\r\n単純推薦を行います。");
                 form1.chordSet();
                 form1.chordName = form1.chordSoundList2.Last();
                 form1.searchChord(form1.chordName);
@@ -335,7 +335,10 @@ namespace chordprogression
                 }
                 else
                 {
-                    MessageBox.Show("推薦できるコードが存在しません。");
+                    MessageBox.Show("多重推定で推薦できるコードが存在しません。\n単純推定を適用します。");
+                    form1.chordSet();
+                    //form1.searchChord(form1.chordList.Peek());
+                    form1.searchChord(form1.chordSoundList2.Last());
                 }
 
             }

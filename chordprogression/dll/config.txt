@@ -1,3 +1,0 @@
-07-02-2021
-algorithm0
-partCheck = 1

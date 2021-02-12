@@ -108,6 +108,8 @@
             this.ToAmelody = new System.Windows.Forms.Button();
             this.ToBmelody = new System.Windows.Forms.Button();
             this.ToSabi = new System.Windows.Forms.Button();
+            this.melodyInputButton = new System.Windows.Forms.Button();
+            this.enteredMelodyText = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // _button1
@@ -975,12 +977,35 @@
             this.ToSabi.UseVisualStyleBackColor = true;
             this.ToSabi.Click += new System.EventHandler(this.ToSabi_Click);
             // 
+            // melodyInputButton
+            // 
+            this.melodyInputButton.Location = new System.Drawing.Point(62, 608);
+            this.melodyInputButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.melodyInputButton.Name = "melodyInputButton";
+            this.melodyInputButton.Size = new System.Drawing.Size(105, 31);
+            this.melodyInputButton.TabIndex = 461;
+            this.melodyInputButton.Text = "メロディー入力";
+            this.melodyInputButton.UseVisualStyleBackColor = true;
+            this.melodyInputButton.Click += new System.EventHandler(this.melodyInputButton_Click);
+            // 
+            // enteredMelodyText
+            // 
+            this.enteredMelodyText.Location = new System.Drawing.Point(197, 608);
+            this.enteredMelodyText.Margin = new System.Windows.Forms.Padding(2);
+            this.enteredMelodyText.Name = "enteredMelodyText";
+            this.enteredMelodyText.ReadOnly = true;
+            this.enteredMelodyText.Size = new System.Drawing.Size(605, 32);
+            this.enteredMelodyText.TabIndex = 462;
+            this.enteredMelodyText.Text = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1365, 713);
+            this.Controls.Add(this.enteredMelodyText);
+            this.Controls.Add(this.melodyInputButton);
             this.Controls.Add(this.ToSabi);
             this.Controls.Add(this.ToBmelody);
             this.Controls.Add(this.ToAmelody);
@@ -1153,6 +1178,8 @@
         public System.Windows.Forms.Label maingenreText;
         public System.Windows.Forms.RichTextBox richTextBox4;
         public System.Windows.Forms.RichTextBox richTextBox5;
+        private System.Windows.Forms.Button melodyInputButton;
+        private System.Windows.Forms.RichTextBox enteredMelodyText;
     }
 }
 

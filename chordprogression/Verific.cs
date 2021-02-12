@@ -21,9 +21,16 @@ namespace chordprogression
                 if (_scale == "C Major")
                 {
                     int count = 0;
+                    /*
                     string[] mainChords = {"C","Dm","Em","F","G","Am","Bdim","C△7","Dm7","Em7","F△7",
                             "G7","Am7","Bm7-5","D","E","A","C7","D7","E7","A7","Fm","Fm7","D#","G#","A#"
+
                         };
+                    */
+                    string[] mainChords = {"C","Dm","Em","F","G","Am","Bdim","C△7","Dm7","Em7","F△7",
+                            "G7","Am7","Bm7-5"
+
+                        }; //ダイアトニックとダイアトニックセブンス
                     for (int i = 0; i < mainChords.Length; i++)
                     {
                         ExcelWorksheet worksheet = package.Workbook.Worksheets[mainChords[i]];
