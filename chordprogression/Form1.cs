@@ -57,9 +57,12 @@ namespace chordprogression
         public int RangeColumsCount;
         public int PartCheckingListCount;
 
+        MelodyToChordForCsharp.Logic logic = new MelodyToChordForCsharp.Logic();
         int threadflag = 0; // 1=スレッド実行中
+        int inputwait = 0; // 1=メロディーの入力を待っている状態
         public Dictionary<string, int> recommendChordByMelody;
         int recommendChordByMelodyCount = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -1269,10 +1272,14 @@ namespace chordprogression
 
         private void random_Click_1(object sender, EventArgs e) //ランダムでコード進行を作る(規則なし)
         {
+            MessageBox.Show("実験用機能です");
+            /*
             RandomRecommend random1 = new RandomRecommend();
 
             random1.setter(ref chordList, ref chordSoundList2, ref richTextBox1, this);
             random1.recommend1(buttonList);
+            */
+
 
         }
 
@@ -1328,9 +1335,7 @@ namespace chordprogression
                     Thread.Sleep(10);
                     if (buttonList[i].Enabled == true)
                     {
-
                         randombuttonList.Add(buttonList[i]);
-
 
                     }
 
@@ -1456,7 +1461,7 @@ namespace chordprogression
 
         void MelodyToChordFunc()
         {
-            MelodyToChordForCsharp.Logic logic = new MelodyToChordForCsharp.Logic();
+            inputwait = 1;
             logic.Setting();
             recommendChordByMelody = logic.main();
 
@@ -1466,6 +1471,7 @@ namespace chordprogression
                 recommendChordByMelodyCount++;
             }
             threadflag = 0;
+            inputwait = 0;
         }
 
         private void melodyInputButton_Click(object sender, EventArgs e) //メロディー認識によるコード推薦(実装予定)
@@ -1487,9 +1493,26 @@ namespace chordprogression
             if(recommendChordByMelodyCount > 0)
             {
                 recommendChordByMelody.Clear();
+                recommendChordByMelodyCount = 0;
                 enteredMelodyText.Clear();
             }
             
+        }
+
+        private void inputCommitButton_Click(object sender, EventArgs e)
+        {
+            if (inputwait == 1)
+            {
+                MessageBox.Show("入力を確定します");
+                logic.exitFlag();
+                recommendChordByMelodyCount = 0;
+
+            } else
+            {
+                MessageBox.Show("メロディーの認識に失敗しました");
+            }
+
+
         }
     }
 }
