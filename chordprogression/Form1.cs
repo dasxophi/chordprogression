@@ -57,11 +57,13 @@ namespace chordprogression
         public int RangeColumsCount;
         public int PartCheckingListCount;
 
+        //メロディーによるコード推薦
         MelodyToChordForCsharp.Logic logic = new MelodyToChordForCsharp.Logic();
         int threadflag = 0; // 1=スレッド実行中
         int inputwait = 0; // 1=メロディーの入力を待っている状態
         public Dictionary<string, int> recommendChordByMelody;
         int recommendChordByMelodyCount = 0;
+        public int melodyaffectionMode = 0;
 
         public Form1()
         {
@@ -1513,6 +1515,14 @@ namespace chordprogression
             }
 
 
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox2.Checked == false)
+                melodyaffectionMode = 0;　//コード進行推薦に反映しない
+            else
+                melodyaffectionMode = 1;　//コード進行推薦に反映する
         }
     }
 }

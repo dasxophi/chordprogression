@@ -997,7 +997,7 @@
             this.enteredMelodyText.Margin = new System.Windows.Forms.Padding(2);
             this.enteredMelodyText.Name = "enteredMelodyText";
             this.enteredMelodyText.ReadOnly = true;
-            this.enteredMelodyText.Size = new System.Drawing.Size(605, 32);
+            this.enteredMelodyText.Size = new System.Drawing.Size(605, 94);
             this.enteredMelodyText.TabIndex = 462;
             this.enteredMelodyText.Text = "";
             // 
@@ -1011,11 +1011,12 @@
             this.checkBox2.TabIndex = 463;
             this.checkBox2.Text = "メロディーをコード推薦に反映";
             this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // clearMelodyButton
             // 
             this.clearMelodyButton.Location = new System.Drawing.Point(870, 608);
-            this.clearMelodyButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.clearMelodyButton.Margin = new System.Windows.Forms.Padding(2);
             this.clearMelodyButton.Name = "clearMelodyButton";
             this.clearMelodyButton.Size = new System.Drawing.Size(60, 30);
             this.clearMelodyButton.TabIndex = 464;
