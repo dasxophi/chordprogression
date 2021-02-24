@@ -1000,6 +1000,7 @@
             this.enteredMelodyText.Size = new System.Drawing.Size(605, 31);
             this.enteredMelodyText.TabIndex = 462;
             this.enteredMelodyText.Text = "";
+            this.enteredMelodyText.TextChanged += new System.EventHandler(this.enteredMelodyText_TextChanged);
             // 
             // checkBox2
             // 

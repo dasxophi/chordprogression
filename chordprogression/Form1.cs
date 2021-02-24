@@ -1524,6 +1524,11 @@ namespace chordprogression
             else
                 melodyaffectionMode = 1;　//コード進行推薦に反映する
         }
+
+        private void enteredMelodyText_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 
