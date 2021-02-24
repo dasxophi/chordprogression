@@ -997,7 +997,7 @@
             this.enteredMelodyText.Margin = new System.Windows.Forms.Padding(2);
             this.enteredMelodyText.Name = "enteredMelodyText";
             this.enteredMelodyText.ReadOnly = true;
-            this.enteredMelodyText.Size = new System.Drawing.Size(605, 94);
+            this.enteredMelodyText.Size = new System.Drawing.Size(605, 31);
             this.enteredMelodyText.TabIndex = 462;
             this.enteredMelodyText.Text = "";
             // 
