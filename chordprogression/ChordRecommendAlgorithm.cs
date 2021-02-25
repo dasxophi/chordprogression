@@ -178,7 +178,6 @@ namespace chordprogression
                     //progressBar1.PerformStep();
                     if (i != ChordsCount - 1)
                     {
-                        //bool result = form1.searchChord2(form1.chordSoundList2[i + 1], form1.chordSoundList2[i]);
                           bool result = form1.searchChord2(form1.chordSoundList2[i + 1], form1.chordSoundList2[i]);
 
 

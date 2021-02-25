@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Media;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using Application = System.Windows.Forms.Application;
 using Button = System.Windows.Forms.Button;
@@ -21,41 +20,41 @@ using Microsoft.Scripting.Hosting;
 
 namespace chordprogression
 {
-    /* 色なし→データなし
-       緑色→☆
-       黄色→☆☆
-       オレンジ色→☆☆☆ */
 
     public partial class Form1 : Form
     {
+        //Excel処理関連
         Form2 f2;
+        public List<Control> buttonList = new List<Control>();
+        public ExcelWorksheet worksheet;
+        public dynamic xlsxFile;
+        public dynamic package;
+        public string filePath = "";
+        public int RangeRowsCount;
+        public int RangeColumsCount;
+
+        //推薦関連
+        public string scale;
+        public int algorithmNumber;
         public Stack<string> chordList = new Stack<string>();
         public List<string> chordSoundList2 = new List<string>();
         public List<string> partCheckingList = new List<string>();
-        public List<Control> buttonList = new List<Control>();
+        public int PartCheckingListCount;
         List<string> prevPartCheckingList = new List<string>();
-        public Dictionary<string, int> artistDictionary = new Dictionary<string, int>();
-
-        public ExcelWorksheet worksheet;
-
-        public dynamic xlsxFile;
-        public dynamic package;
-
-        public bool flag = false;
-        public string scale;
-        public string filePath = "";
-        public int partCheck;
-        public List<string> changeList = new List<string>();
-        public int[] genreProperty = new int[4]; // [0] = pop, [1] = rock, [2] = ballad, [3] = vocaloid
         public string chordName = "";
-        public string maingenreNow = "";
-        public int automode = 0;
-        public string part = "";
+
+        //類似コード進行推薦関連
+        public bool flag = false;
         public List<string> prevChangedChords = new List<string>();
 
-        public int RangeRowsCount;
-        public int RangeColumsCount;
-        public int PartCheckingListCount;
+        //アーティスト名・ジャンル表示関連
+        public Dictionary<string, int> artistDictionary = new Dictionary<string, int>();
+        public int[] genreProperty = new int[4]; // [0] = pop, [1] = rock, [2] = ballad, [3] = vocaloid
+        public string maingenreNow = "";
+
+        //自動モード関連
+        public int automode = 0;
+        public string part = "";
 
         //メロディーによるコード推薦
         MelodyToChordForCsharp.Logic logic = new MelodyToChordForCsharp.Logic();
@@ -177,8 +176,8 @@ namespace chordprogression
 
         public void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
-            
+
+
             if (comboBox1.SelectedIndex > -1)
             {
                 scale = comboBox1.SelectedItem.ToString();
@@ -188,7 +187,7 @@ namespace chordprogression
 
                 if (configLineNew[1] == "algorithm1")
                 {
-                    partCheck = verificAlgorithm.verific();
+                   algorithmNumber = verificAlgorithm.verific();
                 }
                 else
                 {
@@ -196,16 +195,16 @@ namespace chordprogression
                     string[] configLine = File.ReadAllLines("./config.txt");
                     if (configLine.Length == 3 && configLine[2] == "partCheck = 1")
                     {
-                        partCheck = 1;
+                        algorithmNumber = 1;
                     }
                     else if (configLine.Length == 3 && configLine[2] == "partCheck = 0")
                     {
-                        partCheck = 0;
+                        algorithmNumber = 0;
                     }
                     else
                     {
                         MessageBox.Show("以前のアルゴリズムの記録が存在しません。\r\n検証作業を実施します。");
-                        partCheck = verificAlgorithm.verific();
+                        algorithmNumber = verificAlgorithm.verific();
                     }
 
                 }
@@ -281,6 +280,8 @@ namespace chordprogression
                 progressBar1.Value = 0;
                 richTextBox5.Clear();
                 richTextBox4.Clear();
+                partCheckingList.Clear();
+                PartCheckingListCount = 0;
                 MessageBox.Show("全てのコードを削除しました");
                 chordSet();
                 scaleSet();
@@ -299,10 +300,11 @@ namespace chordprogression
 
                 if (chordList.Count > 0)
                 {
-                    chordSet();
                     string prevChord = chordList.Peek();
                     worksheet = package.Workbook.Worksheets[prevChord];
-
+                    partCheckingList.RemoveAt(partCheckingList.Count - 1);
+                    chordSet();
+                    set(prevChord);
                 }
                 else
                 {
@@ -364,12 +366,9 @@ namespace chordprogression
         public void set(string chordName) //  アルゴリズム選択
         {
             Array.Clear(genreProperty, 0, genreProperty.Length);
-            if (partCheck == 1 && chordList.Count > 1) //多重推定を適用　chordList.Count 要らない？
+            if (algorithmNumber == 1 && chordList.Count > 1) //多重推定を適用　chordList.Count 要らない？
             {
-                //MessageBox.Show("set !!");
                 partCheckAlgorithm(partCheckingList);
-                //chordSet();
-                //searchChord(chordName);
             }
             else//直前のコードだけを対象としてコードを推薦(単純推定)
             {
@@ -390,7 +389,7 @@ namespace chordprogression
             richTextBox1.AppendText(chordList.Peek() + "- ");
             set(chordList.Peek());
         }
-
+        /*
         private void r(int rating, params Control[] chord)
         {
             for (int i = 0; i < chord.Length; i++)
@@ -411,7 +410,7 @@ namespace chordprogression
             }
 
         }
-
+        */
 
         /*private int ChordSumAverage()
         {
@@ -664,9 +663,6 @@ namespace chordprogression
                             partCheckingList.Clear();
                             partCheckingList = chordSoundList2.ToList();
                             List<string> copy = new List<string>(partCheckingList);
-
-                            //for (int i = 0; i < partCheckingList.Count; i++)
-                            //MessageBox.Show("partcheking list : " + partCheckingList[i]);
                             copy.RemoveRange(copy.Count - 2, (copy.Count) - (copy.Count - 2));
                             flag = true;
                             partCheckAlgorithm(copy);
@@ -676,8 +672,6 @@ namespace chordprogression
                     }
                     if (automode == 0)
                         form2.Show();
-                    //else if (automode == 1)
-                    // partCheckAlgorithm(copy);
 
                 }
                 else
@@ -1255,7 +1249,6 @@ namespace chordprogression
 
         private void threadstart()
         {
-
 
             Thread thread1 = new Thread(new ThreadStart(progressThread));
             thread1.Start();
