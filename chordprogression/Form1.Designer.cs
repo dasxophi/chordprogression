@@ -998,7 +998,6 @@
             this.enteredMelodyText.Size = new System.Drawing.Size(605, 31);
             this.enteredMelodyText.TabIndex = 462;
             this.enteredMelodyText.Text = "";
-            this.enteredMelodyText.TextChanged += new System.EventHandler(this.enteredMelodyText_TextChanged);
             // 
             // checkBox2
             // 
@@ -1039,7 +1038,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(1365, 713);
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(1115, 713);
             this.Controls.Add(this.inputCommitButton);
             this.Controls.Add(this.clearMelodyButton);
             this.Controls.Add(this.checkBox2);
@@ -1126,10 +1126,11 @@
             this.Controls.Add(this._button2);
             this.Controls.Add(this._button1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.MinimumSize = new System.Drawing.Size(1362, 726);
+            this.MinimumSize = new System.Drawing.Size(1000, 726);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "ChordProgressionRecommender";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

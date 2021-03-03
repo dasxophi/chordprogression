@@ -1518,7 +1518,9 @@ namespace chordprogression
                 melodyaffectionMode = 1;　//コード進行推薦に反映する
         }
 
-        private void enteredMelodyText_TextChanged(object sender, EventArgs e)
+
+
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }
