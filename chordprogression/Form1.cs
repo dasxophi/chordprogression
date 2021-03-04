@@ -16,7 +16,6 @@ using System.Runtime.CompilerServices;
 using OfficeOpenXml;
 using IronPython.Runtime;
 using IronPython.Hosting;
-using Microsoft.Scripting.Hosting;
 
 namespace chordprogression
 {
