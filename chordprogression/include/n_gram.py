@@ -43,7 +43,7 @@ def additional(chords1, chords2, a, b):
 		similarity = similarity + 0.1
 		print("(+0.1)")
 	if(chords1[a] == ['Am'] and chords2[b] == ['Em'] and a == b):
-		similarity = similarity + 0.3
+		similarity = similarity + 0.1
 		print("(+0.3)")
 	if((chords1[a] == ['C'] and chords2[b] == ['CM7'] and a == b) or (chords1[a] == ['CM7'] and chords2[b] == ['C'] and a == b)):
 	    similarity = similarity + 0.3

@@ -14,8 +14,7 @@ using Application = System.Windows.Forms.Application;
 using Button = System.Windows.Forms.Button;
 using System.Runtime.CompilerServices;
 using OfficeOpenXml;
-using IronPython.Runtime;
-using IronPython.Hosting;
+
 
 namespace chordprogression
 {
@@ -500,17 +499,12 @@ namespace chordprogression
 
         }
 
-        private float SimilarDegree(string chordprogression1, string chordprogression2)
+        private double SimilarDegree(string chordprogression1, string chordprogression2)
         {
-            var engine = Python.CreateEngine();
-            var scope = engine.CreateScope();
 
-            //var source = engine.CreateScriptSourceFromFile("C:/Users/admin/source/repos/n-gram/n-gram/n_gram.py");
-            var source = engine.CreateScriptSourceFromFile("./n_gram.py");
-            source.Execute(scope);
+            N_gramCsharp ngram = new N_gramCsharp();
+            double similarity = ngram.similardegree(chordprogression1, chordprogression2);
 
-            var similardegree = scope.GetVariable<Func<string, string, float>>("similardegree");
-            float similarity = similardegree(chordprogression1, chordprogression2);
             return similarity;
         }
 
@@ -518,7 +512,7 @@ namespace chordprogression
         {
 
             List<string> SimilarChordsProgression = new List<string>();
-            Dictionary<string, float> ChordAndSimilarity = new Dictionary<string, float>();
+            Dictionary<string, double> ChordAndSimilarity = new Dictionary<string, double>();
             
                 //ExcelWorksheet worksheet = package.Workbook.Worksheets["データ"];
                 //int RangeRowsCount = worksheet.Dimension.Rows;
@@ -554,7 +548,7 @@ namespace chordprogression
                             if (ChordAndSimilarity.ContainsKey(listToString) == false)
                             {
                                 //MessageBox.Show(listToString);
-                                float similarity = SimilarDegree(listToString, listToString2);
+                                double similarity = SimilarDegree(listToString, listToString2);
 
 
                                 Property property = new Property(ref genreProperty, ref artistDictionary);
@@ -566,7 +560,7 @@ namespace chordprogression
 
                                 if (maingenreNow == maingenreNew)
                                 {
-                                    similarity += (float)3.0; //元のコード進行とメインジャンルが一致したら類似度+3.0
+                                    similarity += (double)3.0; //元のコード進行とメインジャンルが一致したら類似度+3.0
 
                                 }
 
@@ -1521,6 +1515,14 @@ namespace chordprogression
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
+        }
+
+        private void NgramTestButton_Click(object sender, EventArgs e)
+        {
+            N_gramCsharp ngram = new N_gramCsharp();
+            double s = ngram.similardegree("E-G-C-B", "C-Am-D-G");
+            MessageBox.Show(s.ToString());
 
         }
     }
