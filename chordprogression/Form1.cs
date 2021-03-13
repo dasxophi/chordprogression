@@ -1521,8 +1521,10 @@ namespace chordprogression
         private void NgramTestButton_Click(object sender, EventArgs e)
         {
             N_gramCsharp ngram = new N_gramCsharp();
-            double s = ngram.similardegree("E-G-C-B", "C-Am-D-G");
-            MessageBox.Show(s.ToString());
+            //double s = ngram.similardegree("E-G-C-B", "C-Am-D-G");
+            //MessageBox.Show(s.ToString());
+            ngram.n_gramDataBase(this);
+            
 
         }
     }

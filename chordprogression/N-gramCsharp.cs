@@ -4,11 +4,80 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace chordprogression
 {
     class N_gramCsharp
     { 
+        public void n_gramDataBase(Form1 form1)
+        {
+            Form1 form = form1;
+            string filePath = "";
+            string[] strtmp = new string[form1.RangeColumsCount];
+            List<string> FirstGeneration = new List<string>();
+            int k = 0;
+            for (int i = 2; i <= form1.RangeRowsCount; i++)
+            {
+                for (int j = 5; j <= form1.RangeColumsCount; j++)
+                {
+                    if (form1.worksheet.Cells[i, j].Value != null) //nullじゃないとき
+                    {
+                        //MessageBox.Show(j.ToString());
+                        strtmp[k] = form1.worksheet.Cells[i, j].Value.ToString();
+                        k++;
+                    }
+                    else if (form1.worksheet.Cells[i, j].Value == null) //nullのとき
+                    {
+                        
+                    }
+                }
+
+                for (int m = form1.RangeColumsCount; m > 0; m--)
+                {
+                    n_gram(strtmp, i, ref FirstGeneration);
+                    k = 0;
+                }
+            }
+
+
+            MessageBox.Show("前処理終了 : " + FirstGeneration.Count.ToString() + " 個の初期DNAを検出しました");
+            string tmpstring ="";
+            for (int i = 0; i < FirstGeneration.Count; i++)
+            {
+                MessageBox.Show(FirstGeneration[i]);
+            }
+ 
+
+            //Excelファイルから1行を読み込む
+            //その1行に対してn=32から(コード進行データのmaxから)n-gramで分割していく
+            //重複は除いてListに保存しておく
+            //これをデータベースの全ての行に対して行う
+            //全部終わったら前処理終了
+
+
+        }
+
+        public void n_gram(string[] src, int num, ref List<string> result) // numの分だけ分割(配列に対して)
+        {
+
+            string tmp;
+            int n = num;
+            Regex regex = new Regex(@"[a-z|A-Z|0-9]-$");
+            for (int i = 0; i < src.Length - (n - 1); i++)
+            {
+                tmp = src[i];
+                for (int j = 0; j < n - 1; j++)
+                {
+                    tmp += "-" + src[i + j + 1];
+
+                }
+                if(result.Contains(tmp) != true && tmp.Contains("--") != true && tmp != "-" && regex.IsMatch(tmp) != true) result.Add(tmp);
+            }
+
+
+        }
+
         public void n_gram(string src, int num, List<string> result) // numの分だけ分割
         {
             string[] strsplit = src.Split('-');
@@ -55,12 +124,6 @@ namespace chordprogression
                 n_gram(src, i, result);
             }
 
-            /*
-            for (int i = 0; i < result.Count; i++)
-            {
-                MessageBox.Show(result[i]);
-            }
-            */
             return result;
 
         }
