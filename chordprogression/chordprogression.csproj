@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChordRecommendAlgorithm.cs" />
+    <Compile Include="ColorChange.cs" />
     <Compile Include="DNA.cs" />
     <Compile Include="GeneticAlgorithm.cs" />
     <Compile Include="N-gramCsharp.cs" />
