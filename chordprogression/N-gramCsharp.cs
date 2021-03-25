@@ -10,16 +10,17 @@ namespace chordprogression
 {
     class N_gramCsharp
     { 
-        public void n_gramDataBase(Form1 form1)
+        public void n_gramDataBase(Form1 form1) //n=2からn=ColumMaxまで全てngram分割
         {
-            Form1 form = form1;
-            string filePath = "";
-            string[] strtmp = new string[form1.RangeColumsCount];
-            List<string> FirstGeneration = new List<string>();
+            int ColumMax = form1.RangeColumsCount;
+            int RowMax = form1.RangeRowsCount;
+            string[] strtmp = new string[ColumMax];
+            List<string> FirstHM = new List<string>();
             int k = 0;
-            for (int i = 2; i <= form1.RangeRowsCount; i++)
+
+            for (int i = 2; i <= RowMax; i++)
             {
-                for (int j = 5; j <= form1.RangeColumsCount; j++)
+                for (int j = 5; j <= ColumMax; j++)
                 {
                     if (form1.worksheet.Cells[i, j].Value != null) //nullじゃないとき
                     {
@@ -28,26 +29,22 @@ namespace chordprogression
                         k++;
                     }
                     else if (form1.worksheet.Cells[i, j].Value == null) //nullのとき
-                    {
-                        
-                    }
+                    {}
                 }
 
-                for (int m = form1.RangeColumsCount; m > 0; m--)
+                for (int m =ColumMax; m > 0; m--)
                 {
-                    n_gram(strtmp, i, ref FirstGeneration);
+                    n_gram(strtmp, i, ref FirstHM);
                     k = 0;
                 }
             }
 
 
-            MessageBox.Show("前処理終了 : " + FirstGeneration.Count.ToString() + " 個の初期DNAを検出しました");
-            string tmpstring ="";
-            for (int i = 0; i < FirstGeneration.Count; i++)
+            MessageBox.Show("前処理終了 : " + FirstHM.Count.ToString() + " 個の初期データを検出しました");
+            for (int i = 0; i < FirstHM.Count; i++)
             {
-                MessageBox.Show(FirstGeneration[i]);
+                MessageBox.Show(FirstHM[i]);
             }
- 
 
             //Excelファイルから1行を読み込む
             //その1行に対してn=32から(コード進行データのmaxから)n-gramで分割していく
@@ -55,8 +52,48 @@ namespace chordprogression
             //これをデータベースの全ての行に対して行う
             //全部終わったら前処理終了
 
-
         }
+
+        public List<string> n_gramDataBaseByN(Form1 form1, int N) //n=Nで分割
+        {
+            int ColumMax = form1.RangeColumsCount;
+            int RowMax = form1.RangeRowsCount;
+            string[] strtmp = new string[ColumMax];
+            List<string> FirstHM = new List<string>();
+            int k = 0;
+
+            for (int i = 2; i <= RowMax; i++)
+            {
+                for (int j = 5; j <= ColumMax; j++)
+                {
+                    if (form1.worksheet.Cells[i, j].Value != null) //nullじゃないとき
+                    {
+                        //MessageBox.Show(j.ToString());
+                        strtmp[k] = form1.worksheet.Cells[i, j].Value.ToString();
+                        k++;
+                    }
+                    else if (form1.worksheet.Cells[i, j].Value == null) //nullのとき
+                    { }
+                }
+
+                for (int m = ColumMax; m > 0; m--)
+                {
+                    n_gram(strtmp, N, ref FirstHM);
+                    k = 0;
+                }
+            }
+
+            return FirstHM;
+            /*
+            MessageBox.Show("前処理終了 : " + FirstHM.Count.ToString() + " 個の初期データを検出しました");
+            for (int i = 0; i < FirstHM.Count; i++)
+            {
+                MessageBox.Show(FirstHM[i]);
+            }
+            */
+        }
+
+
 
         public void n_gram(string[] src, int num, ref List<string> result) // numの分だけ分割(配列に対して)
         {
