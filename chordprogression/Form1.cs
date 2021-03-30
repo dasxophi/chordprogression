@@ -169,9 +169,6 @@ namespace chordprogression
 
         }
 
-
-       
-
         public void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -366,14 +363,20 @@ namespace chordprogression
             Array.Clear(genreProperty, 0, genreProperty.Length);
             if (algorithmNumber == 1 && chordList.Count > 1) //多重推定を適用　chordList.Count 要らない？
             {
-                partCheckAlgorithm(partCheckingList);
+                //partCheckAlgorithm(partCheckingList);
+                chordSoundList2.Add("Dummy");
+                HS hs = new HS(20, chordSoundList2.Count, this, chordSoundList2);
+                hs.Launch();
+
+                int dummyIndex = chordSoundList2.IndexOf("Dummy");
+                chordSoundList2.RemoveAt(dummyIndex); //追加しておいたDummyを削除
+
             }
             else//直前のコードだけを対象としてコードを推薦(単純推定)
             {
                 chordSet();
                 searchChord(chordName);
 
-                //chordSumAverage();
             }
 
         }
@@ -387,60 +390,7 @@ namespace chordprogression
             richTextBox1.AppendText(chordList.Peek() + "- ");
             set(chordList.Peek());
         }
-        /*
-        private void r(int rating, params Control[] chord)
-        {
-            for (int i = 0; i < chord.Length; i++)
-            {
-                chord[i].Enabled = true;
-                switch (rating)
-                {
-                    case 0:
-                        chord[i].BackColor = Color.LightGreen;
-                        break;
-                    case 1:
-                        chord[i].BackColor = Color.Yellow;
-                        break;
-                    case 2:
-                        chord[i].BackColor = Color.Orange;
-                        break;
-                }
-            }
-
-        }
-        */
-
-        /*private int ChordSumAverage()
-        {
-
-            chordName = "";
-            int sum = 0;
-            int count = 0;
-            int sumdivcount = 0;
-            for (int i = 2; i <= range.Rows.Count; i = i + 3)
-            {
-                // MessageBox.Show("iは" + i);
-
-                for (int j = 1; j <= range.Columns.Count - 2; ++j)
-                {
-                    if ((int)worksheet.Cells[i + 2, j].Value > 0)
-                    {
-                        sum = sum + (int)worksheet.Cells[i + 2, j].Value;
-                        count++;
-                    }
-                }
-
-            }
-            //DeleteObject(application.ActiveSheet);
-            sumdivcount = sum / count;
-
-            if (sumdivcount > 0)
-                return (sumdivcount);
-            else
-                return 0;
-
-        } */
-
+        
         public void searchChord(string sheetName) //単純推定そのもの
         {
             ChordRecommendAlgorithm chordRecommendAlgorithm = new ChordRecommendAlgorithm();
@@ -1518,41 +1468,6 @@ namespace chordprogression
 
         }
 
-        private void NgramTestButton_Click(object sender, EventArgs e)
-        {
-            // N_gramCsharp ngram = new N_gramCsharp();
-            //double s = ngram.similardegree("E-G-C-B", "C-Am-D-G");
-            //MessageBox.Show(s.ToString());
-            //ngram.n_gramDataBase(this);
-            //ngram.n_gramDataBaseByN(this,3);
-            List<string> a = new List<string>();
-            a.Add("Am");
-            a.Add("G");
-            a.Add("Dummy");
-            HS hs = new HS(20, a.Count, this, a);
-            hs.Launch();
-
-        }
-
-        private void dijkstar_Click(object sender, EventArgs e)
-        {
-            ObjectiveFunction func = new ObjectiveFunction();
-            
-            List<string> a = new List<string>();
-            List<string> b = new List<string>();
-            a.Add("Am");
-            a.Add("G");
-            a.Add("C");
-            a.Add("C");
-            b.Add("C");
-            b.Add("C");
-            b.Add("Ab");
-            b.Add("C");
-            //int value = func.objectFunction(a, b);
-            //MessageBox.Show("value = " + value);
-
-
-        }
     }
 }
 

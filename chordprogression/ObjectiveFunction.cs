@@ -13,7 +13,7 @@ namespace chordprogression
     {
 
         private static int INF = 50000;
-        private static int[,] fifthCircle = new int[,]
+        private static int[,] fifthCircle = new int[24, 24]
         {
                 {0, 1, INF, INF, INF, INF, 1, INF, INF, INF, INF, 1, 1, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF},
                 {1, 0, 1, INF, INF, INF, INF, 1, INF, INF, INF, INF, INF, 1, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF},
@@ -42,42 +42,59 @@ namespace chordprogression
                 {INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, 1, 1, INF, INF, INF, INF, 1, INF, INF, INF, INF, 1, 0}
         };
         private static int[] dist = new int[] { INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF, INF };
-        private static int[] prev = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-        
+        private static int[] prev = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+        Regex regexC = new Regex(@"^(C)(M7|7|dim)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?$");
+        Regex regexF = new Regex(@"^(F)(M7|7|dim|)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?$");
+        Regex regexBb = new Regex(@"^(Bb|A#)(M7|7|dim)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?$");
+        Regex regexEb = new Regex(@"^(Eb|D#)(M7|7|dim)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?$");
+        Regex regexAb = new Regex(@"^(Ab|G#)(M7|7|dim)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?$");
+        Regex regexDb = new Regex(@"^(Db|C#)(M7|7|dim)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?$");
+        Regex regexGb = new Regex(@"^(Gb|F#)(M7|7|dim)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?$");
+        Regex regexB = new Regex(@"^(B)(M7|7|dim)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?$");
+        Regex regexE = new Regex(@"^(E)(M7|7|dim)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?$");
+        Regex regexA = new Regex(@"^(A)(M7|7|dim)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?$");
+        Regex regexD = new Regex(@"^(D)(M7|7|dim)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?$");
+        Regex regexG = new Regex(@"^(G)(M7|7|dim)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?$");
+        Regex regexAm = new Regex(@"^(Am)(7|M7)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?");
+        Regex regexDm = new Regex(@"^(Dm)(7|M7)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?");
+        Regex regexGm = new Regex(@"^(Gm)(7|M7)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?");
+        Regex regexCm = new Regex(@"^(Cm)(7|M7)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?");
+        Regex regexFm = new Regex(@"^(Fm)(7|M7)?(/[A-Z][#|b]?|sus4|add9|dim[7|9]?|b5|aug|6)?");
+        Regex regexBbm = new Regex(@"^(A#m|Bbm)(7|M7)?[/|add|b5|aug]?[A-Z]?[#|b]?");
+        Regex regexEbm = new Regex(@"^(D#m|Ebm)(7|M7)?[/|add|b5|aug]?[A-Z]?[#|b]?");
+        Regex regexAbm = new Regex(@"^(G#m|Abm)(7|M7)?[/|add|b5|aug]?[A-Z]?[#|b]?");
+        Regex regexDbm = new Regex(@"^(C#m|Dbm)(7|M7)?[/|add|b5|aug]?[A-Z]?[#|b]?");
+        Regex regexGbm = new Regex(@"^(F#m|Gbm)(7|M7)?[/|add|b5|aug]?[A-Z]?[#|b]?");
+        Regex regexBm = new Regex(@"^(Bm)(7|M7)?[/|add|b5|aug]?[A-Z]?[#|b]?");
+        Regex regexEm = new Regex(@"^(Em)(7|M7)?[/|add|b5|aug]?[A-Z]?[#|b]?");
+
         public int ChordToNumber(string chord)
         {
-            Regex regexC = new Regex(@"[C|CM7|C7]/[a-z|A-Z|0-9]$");
-            Regex regexF = new Regex(@"[F|FM7|F7]/[a-z|A-Z|0-9]$");
-            Regex regexBb = new Regex(@"[Bb|BbM7|Bb7]/[a-z|A-Z|0-9]$");
-            Regex regexEb = new Regex(@"[Eb|EbM7|Eb7]/[a-z|A-Z|0-9]$");
-            Regex regexAb = new Regex(@"[Ab|AbM7|Ab7]/[a-z|A-Z|0-9]$");
-            Regex regexDb = new Regex(@"[Db|DbM7|Db7]/[a-z|A-Z|0-9]$");
-            Regex regexGb = new Regex(@"[Gb|GbM7|Gb7]/[a-z|A-Z|0-9]$");
-            Regex regexB = new Regex(@"[B|BM7|B7]/[a-z|A-Z|0-9]$");
-            if (chord == "C" || chord == "CM7" || chord == "C7" ) return 0;
-            else if (chord == "F" || chord == "FM7" || chord == "F7" ) return 1;
-            else if (chord == "Bb" || chord == "BbM7" || chord == "Bb7") return 2;
-            else if (chord == "Eb" || chord == "EbM7" || chord == "Eb7") return 3;
-            else if (chord == "Ab" || chord == "AbM7" || chord == "Ab7") return 4;
-            else if (chord == "Db" || chord == "DbM7" || chord == "Db7") return 5;
-            else if (chord == "Gb" || chord == "GbM7" || chord == "Gb7") return 6;
-            else if (chord == "B" || chord == "BM7" || chord == "B7") return 7;
-            else if (chord == "E" || chord == "EM7" || chord == "E7") return 8;
-            else if (chord == "A" || chord == "AM7" || chord == "A7") return 9;
-            else if (chord == "D" || chord == "DM7" || chord == "D7") return 10;
-            else if (chord == "G" || chord == "GM7" || chord == "G7") return 11;
-            else if (chord == "Am" || chord == "Am7" || chord == "AmM7") return 12;
-            else if (chord == "Dm" || chord == "Dm7" || chord == "DmM7") return 13;
-            else if (chord == "Gm" || chord == "Gm7" || chord == "GmM7") return 14;
-            else if (chord == "Cm" || chord == "Cm7" || chord == "CmM7") return 15;
-            else if (chord == "Fm" || chord == "Fm7" || chord == "FmM7") return 16;
-            else if (chord == "Bbm" || chord == "Bbm7" || chord == "BbmM7") return 17;
-            else if (chord == "Ebm" || chord == "Ebm7" || chord == "EbmM7") return 18;
-            else if (chord == "Abm" || chord == "Abm7" || chord == "AbmM7") return 19;
-            else if (chord == "Dbm" || chord == "Dbm7" || chord == "DbmM7") return 20;
-            else if (chord == "Gbm" || chord == "Gbm7" || chord == "GbmM7") return 21;
-            else if (chord == "Bm" || chord == "Bm7" || chord == "BmM7") return 22;
-            else if (chord == "Em" || chord == "Em7" || chord == "EmM7") return 23;
+
+            if (regexC.IsMatch(chord) == true && chord.Contains("Cm") == false) return 0;
+            else if (regexF.IsMatch(chord) == true && chord.Contains("Fm") == false) return 1;
+            else if (regexBb.IsMatch(chord) == true && chord.Contains("Bbm") == false && chord.Contains("A#m") == false) return 2;
+            else if (regexEb.IsMatch(chord) == true && chord.Contains("Ebm") == false && chord.Contains("D#m") == false) return 3;
+            else if (regexAb.IsMatch(chord) == true && chord.Contains("Abm") == false && chord.Contains("G#m") == false) return 4;
+            else if (regexDb.IsMatch(chord) == true && chord.Contains("Dbm") == false && chord.Contains("C#m") == false) return 5;
+            else if (regexGb.IsMatch(chord) == true && chord.Contains("Gbm") == false && chord.Contains("F#m") == false) return 6;
+            else if (regexB.IsMatch(chord) == true && chord.Contains("Bm") == false) return 7;
+            else if (regexE.IsMatch(chord) == true && chord.Contains("Em") == false) return 8;
+            else if (regexA.IsMatch(chord) == true && chord.Contains("Am") == false) return 9;
+            else if (regexD.IsMatch(chord) == true && chord.Contains("Dm") == false) return 10;
+            else if (regexG.IsMatch(chord) == true && chord.Contains("Gm") == false) return 11;
+            else if (regexAm.IsMatch(chord) == true) return 12;
+            else if (regexDm.IsMatch(chord) == true) return 13;
+            else if (regexGm.IsMatch(chord) == true) return 14;
+            else if (regexCm.IsMatch(chord) == true) return 15;
+            else if (regexFm.IsMatch(chord) == true) return 16;
+            else if (regexBbm.IsMatch(chord) == true) return 17;
+            else if (regexEbm.IsMatch(chord) == true) return 18;
+            else if (regexAbm.IsMatch(chord) == true) return 19;
+            else if (regexDbm.IsMatch(chord) == true) return 20;
+            else if (regexGbm.IsMatch(chord) == true) return 21;
+            else if (regexBm.IsMatch(chord) == true) return 22;
+            else if (regexEm.IsMatch(chord) == true) return 23;
             else return -1;
         }
 
@@ -85,11 +102,12 @@ namespace chordprogression
         {
             if(tmp == start)
             {
-                MessageBox.Show(start.ToString());
+                //MessageBox.Show(start.ToString());
+                Console.Write(start);
             } 
             else
             {
-                MessageBox.Show(tmp + "->");
+                Console.Write(tmp + "->");
                 return TrackingMinimum(start, prev[tmp]);
             }
             return 0;
@@ -97,42 +115,82 @@ namespace chordprogression
 
         private int DijkstraAlgorithm(int start, int end)
         {
-            //Dijkstra Algorithm
-            if (start > 23 || end > 23) MessageBox.Show("計算できません");
-            Console.WriteLine("start : " + start);
-            dist[start] = 0; // initialization
-            for(int i = 0; i < 23; i++)
+
+            if (start > 23 || end > 23) MessageBox.Show("エラー");
+            else
             {
-                for(int j = 0; j < 23; j++)
+                
+                for (int i = 0; i < 24; i++) // initialization1
                 {
-                    if(fifthCircle[i,j] != INF) //iからjまでの経路が存在するかチェック
+                    dist[i] = INF;
+                    prev[i] = -1;
+                }
+                
+                //Dijkstra Algorithm
+                dist[start] = 0; // initialization2
+                for (int i = 0; i < 24; i++) //左回りに最短距離計算
+                {
+                    for (int j = 0; j < 24; j++)
                     {
-                        if(dist[j] == INF) //また, Jまでの距離が初期値(INF)だったら
+                        if (fifthCircle[i, j] != INF) //iからjまでの経路が存在するかチェック. fifthCirlce[i,j]は最初に設定しておいたiとj間の最短距離
                         {
-                            dist[j] = dist[i] + fifthCircle[i, j]; // jまでの距離が最小距離
-                            prev[j] = i;
+                            if (dist[j] == INF) //また, Jまでの距離が初期値(INF)だったら
+                            {
+                               
+                                dist[j] = dist[i] + fifthCircle[i, j]; // jまでの距離が最小距離
+                                prev[j] = i;
+                            }
+                            else if (dist[j] > dist[i] + fifthCircle[i, j])
+                            {
+                                dist[j] = dist[i] + fifthCircle[i, j];
+                                prev[j] = i;
+                            }
                         }
-                        else if(dist[j] > dist[i] + fifthCircle[i, j])
-                        {
-                            dist[j] = dist[i] + fifthCircle[i, j];
-                            prev[j] = i;
-                        }
+
                     }
                 }
+                
+                for (int i = 23; i >= 0; i--)//右回りに最短距離計算
+                {
+                    for (int j = 23; j >= 0; j--)
+                    {
+                        if (fifthCircle[i, j] != INF) //iからjまでの経路が存在するかチェック. fifthCirlce[i,j]は最初に設定しておいたiとj間の最短距離
+                        {
+                            if (dist[j] == INF) //また, Jまでの距離が初期値(INF)だったら
+                            {
+
+                                dist[j] = dist[i] + fifthCircle[i, j]; // jまでの距離が最小距離
+                                prev[j] = i;
+                            }
+                            else if (dist[j] > dist[i] + fifthCircle[i, j])
+                            {
+                                dist[j] = dist[i] + fifthCircle[i, j];
+                                prev[j] = i;
+                            }
+                        }
+
+                    }
+                }
+
             }
-            //MessageBox.Show("length : " + dist[end]);
+            /*
+            for(int i =0; i<24;i++)
+            {
+                Console.Write(dist[i] + ",");
+            }
+            Console.WriteLine();
+            */
             //TrackingMinimum(start, end);
             return dist[end];
         }
 
         public int objectFunction(List<string> CPc, List<string> CPn, int N) //List ver
         {
-            //int N = CPn.Count();
             int value = 0;
             for(int i = 0; i < N-1; i++)
             {
                 value += DijkstraAlgorithm(ChordToNumber(CPc[i]), ChordToNumber(CPn[i]));
-                Console.WriteLine("value : " + value);
+
             }
             
             return value;
@@ -140,18 +198,17 @@ namespace chordprogression
 
         public int[] objectFunction(List<string> CPc, string[,] CPn, int HMS, int N) //All-Array ver
         {
-            //int N = CPc.Count(); //dummy考慮
             int value = 0;
             int[] Values = new int[HMS];
             for (int i = 0; i < HMS; i++)
             {
-                Console.WriteLine("i = " + i);
                 for(int j = 0; j< N - 1; j++)
                 {
-                    Console.WriteLine("i, j" + i + ", " + j);
+                    Console.WriteLine("current chord : " + CPc[j] + " " + "new chord : " + CPn[i, j]);
+                    Console.WriteLine(ChordToNumber(CPc[j]) + " " +  ChordToNumber(CPn[i, j]));
                     value += DijkstraAlgorithm(ChordToNumber(CPc[j]), ChordToNumber(CPn[i, j]));
-                    //Console.WriteLine(value);
                 }
+                //Console.WriteLine("value : " + value);
                 Values[i] = value;
                 value = 0;
                 

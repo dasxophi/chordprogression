@@ -142,10 +142,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChordRecommendAlgorithm.cs" />
-    <Compile Include="ColorChange.cs" />
     <Compile Include="HS.cs" />
     <Compile Include="ObjectiveFunction.cs" />
     <Compile Include="N-gramCsharp.cs" />
+    <Compile Include="PitchArrangement.cs" />
     <Compile Include="Property.cs" />
     <Compile Include="RandomRecommend.cs" />
     <Compile Include="Verific.cs" />

@@ -113,8 +113,6 @@
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.clearMelodyButton = new System.Windows.Forms.Button();
             this.inputCommitButton = new System.Windows.Forms.Button();
-            this.NgramTestButton = new System.Windows.Forms.Button();
-            this.dijkstar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // _button1
@@ -1035,28 +1033,6 @@
             this.inputCommitButton.UseVisualStyleBackColor = true;
             this.inputCommitButton.Click += new System.EventHandler(this.inputCommitButton_Click);
             // 
-            // NgramTestButton
-            // 
-            this.NgramTestButton.Location = new System.Drawing.Point(934, 608);
-            this.NgramTestButton.Margin = new System.Windows.Forms.Padding(2);
-            this.NgramTestButton.Name = "NgramTestButton";
-            this.NgramTestButton.Size = new System.Drawing.Size(60, 30);
-            this.NgramTestButton.TabIndex = 466;
-            this.NgramTestButton.Text = "n-gram";
-            this.NgramTestButton.UseVisualStyleBackColor = true;
-            this.NgramTestButton.Click += new System.EventHandler(this.NgramTestButton_Click);
-            // 
-            // dijkstar
-            // 
-            this.dijkstar.Location = new System.Drawing.Point(998, 608);
-            this.dijkstar.Margin = new System.Windows.Forms.Padding(2);
-            this.dijkstar.Name = "dijkstar";
-            this.dijkstar.Size = new System.Drawing.Size(60, 30);
-            this.dijkstar.TabIndex = 467;
-            this.dijkstar.Text = "dijkstar";
-            this.dijkstar.UseVisualStyleBackColor = true;
-            this.dijkstar.Click += new System.EventHandler(this.dijkstar_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1064,8 +1040,6 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1115, 713);
-            this.Controls.Add(this.dijkstar);
-            this.Controls.Add(this.NgramTestButton);
             this.Controls.Add(this.inputCommitButton);
             this.Controls.Add(this.clearMelodyButton);
             this.Controls.Add(this.checkBox2);
@@ -1249,8 +1223,6 @@
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Button clearMelodyButton;
         private System.Windows.Forms.Button inputCommitButton;
-        private System.Windows.Forms.Button NgramTestButton;
-        private System.Windows.Forms.Button dijkstar;
     }
 }
 

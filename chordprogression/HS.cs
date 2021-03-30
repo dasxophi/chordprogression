@@ -6,39 +6,43 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 
+
+
 namespace chordprogression
 {
     class HS
     {
         private Form1 form1;
         private static int HMS;
-        private static double HMCR = 0.80;
+        private static double HMCR = 0.85;
         private static double PAR = 0.10;
         private static int N;
-        private static int FREQUENCY = 50; //繰り返し回数
+        private static int FREQUENCY = 500; //繰り返し回数
         //private static string[,] HM = new string[HMS, N];
         //private static int[] Values = new int[HMS];
-        private List<String> CPc; //データベースのコード進行をn-gramで分割してここに保存
-        Random random = new Random();
+        private List<string> CPc;  //現在のコード進行を保存
+        private List<string> FirstCP; //データベースのコード進行をn-gramで分割してここに保存
+
+        PitchArrangement pitchArrangement = new PitchArrangement(); // PitchArrangementに使うclassを読み込む
+        Random random = new Random();　　　　　　　　　　　　　　　
 
         private int[] InitalHM(string[,] HM, int[] Values, int N)
         {
             
             ObjectiveFunction objfunc = new ObjectiveFunction();
             N_gramCsharp ngram = new N_gramCsharp();
-            List<string> FirstCP = ngram.n_gramDataBaseByN(form1,N);
-            Console.WriteLine("HMS, N : " + HMS + ", " + N);
-            Console.WriteLine("CPc : " + CPc[2]);
+            FirstCP = ngram.n_gramDataBaseByN(form1,N);
             for (int i = 0; i < HMS; i++)
             {
-                string[] tmp = FirstCP[i].Split('-');
+                int randomNumber = random.Next(0, FirstCP.Count-1); //FirstCPの要素の中からランダムで持ってくる
+                string[] tmp = FirstCP[randomNumber].Split('-');
                 
  
                 for (int j = 0; j < N; j++)
                 {
-                    Console.WriteLine("----insert------");
-                    tmp[j] = tmp[j].Replace('△', 'M');
-                    tmp[j] = tmp[j].Replace('-', 'b');
+                    //Console.WriteLine("----insert------");
+                    //tmp[j] = tmp[j].Replace('△', 'M');
+                    //tmp[j] = tmp[j].Replace('-', 'b');
                     HM[i, j] = tmp[j];
                 }
                 
@@ -109,6 +113,11 @@ namespace chordprogression
                     CPn.Add(HM[i, j]);
 
                 }
+                if(random.NextDouble() <= PAR) // with probability PAR
+                {
+                    int i = random.Next(0, N-1); 
+                    CPn[i] = PitchArrangement(CPn[i]); // pitcharrangementを行う
+                }
                 return CPn;
 
             }
@@ -130,40 +139,96 @@ namespace chordprogression
         private int UpdateHM(string[,] HM, int[] Values, List<string> CPc, List<string> CPn)
         { 
             ObjectiveFunction objfunc = new ObjectiveFunction();
-            int value = objfunc.objectFunction(CPc, CPn, N);
-            Console.WriteLine("value 1 : " + Values[1]);
-            Console.WriteLine("value 2 : " + Values[2]);
-            for (int i = 0; i < HMS; i++)
+
+            if(IsExist(HM, HMS, N, CPn) != true)
             {
-                if (Values[i] > value) // CPnのvalueより大きいvalueを発見したら
+                int value = objfunc.objectFunction(CPc, CPn, N);
+                value = value + IsMatchDataBase(FirstCP, CPn); 
+                for (int i = 0; i < HMS; i++)
                 {
-                    Console.WriteLine("updating...");
-                    Values[i] = value; // i番目のCPのvalueをCPnのvalueとする
-                    for (int j = 0; j < N; j++)
+                    if (Values[i] > value) // CPnのvalueより大きいvalueを発見したら
                     {
-                        HM[i, j] = CPn[j]; // i番目のCPをCPnに入れ替える
+                        //Console.WriteLine("updating...");
+                        Values[i] = value; // i番目のCPのvalueをCPnのvalueとする
+                        for (int j = 0; j < N; j++)
+                        {
+                            HM[i, j] = CPn[j]; // i番目のCPをCPnに入れ替える
+                        }
+                        Sorting(HM, Values, 0, HMS - 1); //updateしたHMをsort
+                        return 0; //終了する
                     }
-                    Sorting(HM, Values, 0, HMS - 1); //updateしたHMをsort
-                    return 0; //終了する
+
                 }
-                
+                return 0;
             }
             return 0;
+            
+        }
+
+        private bool IsExist(string[,] HM, int HMS, int N, List<string> CPn)
+        {
+            int count = 0;
+            for (int i = 0; i < HMS; i++)
+            {
+                for(int j = 0; j < N; j++)
+                {
+                    if (HM[i, j] == CPn[j]) count++;
+                }
+                if (count == N) return true;
+                else count = 0;
+
+            }
+            return false;
+            
         }
 
         private void RecommendAndColor(List<string> RecommendList, int[] Values, Form1 form1)
         {
-            //int num = 0;
+            form1.chordSet();
             for(int i = 0; i < RecommendList.Count(); i++)
             {
                 form1.chordName = RecommendList[i];
                 form1.chordName = form1.chordName.Replace('-', 'b');
                 form1.buttonList[i].Enabled = true;
-                form1.buttonList[i].BackColor = Color.FromArgb(255, 0 + Values[i] * 50, 0 + Values[i]*50);
+                form1.buttonList[i].BackColor = Color.FromArgb(255, 0 + Values[i] * 30, 0 + Values[i]*30);
                 form1.buttonList[i].Text = form1.chordName;
-                //num++;
             }
             
+        }
+
+        private string PitchArrangement(string chord)
+        {
+            Console.WriteLine("*******Pitch Arrangement*********");
+            int tmp = random.Next(1, 100);
+            if (tmp > 50)
+            {
+                chord = pitchArrangement.Sharp(chord); // 半半の確率で半音上げまたは半音下げ
+                return chord;
+            }
+            else
+            {
+                chord = pitchArrangement.Flat(chord);
+                return chord;
+            }          
+        }
+        
+        private int IsMatchDataBase(List<string> FirstCP, List<string> CPn)
+        {
+            string CPnString = String.Join("-", CPn.ToArray());
+            bool flag = false;
+            int penalty = 0;
+            for (int i = 0; i < FirstCP.Count; i++)
+            {
+                if (FirstCP[i] == CPnString) //データベースのコード進行とマッチしたらpenaltyなし
+                {
+                    Console.WriteLine("match!"); 
+                    flag = true;
+                    break;
+                }
+            }
+
+            if (flag == false) penalty++;　　　//データベースのコード進行とマッチするのが存在しなかったらpenalty付与
+            return penalty;
         }
 
         public HS(int _HMS, int _N, Form1 _form, List<string> _CPc)
@@ -199,7 +264,7 @@ namespace chordprogression
             List<string> RecommendList = new List<string>();
             for (int i = 0; i < HMS; i++) 
             {
-                if(RecommendList.Contains(HM[i, N - 1]) != true) RecommendList.Add(HM[i, N - 1]);
+                if(Values[i] < 6 && RecommendList.Contains(HM[i, N - 1]) != true) RecommendList.Add(HM[i, N - 1]);
                 //CPの最後の要素をRecommendListに追加
             }
 

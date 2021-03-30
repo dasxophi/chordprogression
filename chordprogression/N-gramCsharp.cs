@@ -70,6 +70,8 @@ namespace chordprogression
                     {
                         //MessageBox.Show(j.ToString());
                         strtmp[k] = form1.worksheet.Cells[i, j].Value.ToString();
+                        strtmp[k] = strtmp[k].Replace('△', 'M');
+                        strtmp[k] = strtmp[k].Replace('-', 'b');
                         k++;
                     }
                     else if (form1.worksheet.Cells[i, j].Value == null) //nullのとき
