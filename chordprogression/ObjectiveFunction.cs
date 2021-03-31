@@ -204,8 +204,8 @@ namespace chordprogression
             {
                 for(int j = 0; j< N - 1; j++)
                 {
-                    Console.WriteLine("current chord : " + CPc[j] + " " + "new chord : " + CPn[i, j]);
-                    Console.WriteLine(ChordToNumber(CPc[j]) + " " +  ChordToNumber(CPn[i, j]));
+                    //Console.WriteLine("current chord : " + CPc[j] + " " + "new chord : " + CPn[i, j]);
+                    //Console.WriteLine(ChordToNumber(CPc[j]) + " " +  ChordToNumber(CPn[i, j]));
                     value += DijkstraAlgorithm(ChordToNumber(CPc[j]), ChordToNumber(CPn[i, j]));
                 }
                 //Console.WriteLine("value : " + value);

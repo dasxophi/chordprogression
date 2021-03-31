@@ -232,7 +232,7 @@ namespace chordprogression
         {
             form1 = _form;
             List<string> recommendList = new List<string>();
-            Property property = new Property(ref form1.genreProperty, ref form1.artistDictionary);
+            Property property = new Property(form1);
             int PartCheckingListCount = partCheckingList.Count;
             int k = 0;
             List<string> partCheckingList2 = partCheckingList.ToList();
@@ -267,8 +267,7 @@ namespace chordprogression
                             artistsearch(worksheet, i);
                             */
 
-                            property.genresearch(form1.worksheet, i);
-                            property.artistsearch(form1.worksheet, i);
+                            property.search(form1.worksheet, i);
                             k = 0;
                         }
 
@@ -347,7 +346,7 @@ namespace chordprogression
         {
             form1 = _form;
             List<string> recommendList = new List<string>();
-            Property property = new Property(ref form1.genreProperty, ref form1.artistDictionary);
+            Property property = new Property(form1);
             int PartCheckingListCount = partCheckingList.Count;
             int k = 0;
             List<string> partCheckingList2 = partCheckingList.ToList();
@@ -383,8 +382,8 @@ namespace chordprogression
                                     genresearch(worksheet, i);
                                     artistsearch(worksheet, i);
                                     */
-                                    property.genresearch(form1.worksheet, i);
-                                    property.artistsearch(form1.worksheet, i);
+                                    property.search(form1.worksheet, i);
+
 
                                     k = 0;
                                 }
@@ -428,8 +427,8 @@ namespace chordprogression
                                     genresearch(worksheet, i);
                                     artistsearch(worksheet, i);
                                     */
-                                    property.genresearch(form1.worksheet, i);
-                                    property.artistsearch(form1.worksheet, i);
+                                    property.search(form1.worksheet, i);
+
 
                                     k = 0;
                                 }
@@ -473,8 +472,7 @@ namespace chordprogression
                                     genresearch(worksheet, i);
                                     artistsearch(worksheet, i);
                                     */
-                                    property.genresearch(form1.worksheet, i);
-                                    property.artistsearch(form1.worksheet, i);
+                                    property.search(form1.worksheet, i);
 
                                     k = 0;
                                 }
@@ -518,8 +516,7 @@ namespace chordprogression
                                     genresearch(worksheet, i);
                                     artistsearch(worksheet, i);
                                     */
-                                    property.genresearch(form1.worksheet, i);
-                                    property.artistsearch(form1.worksheet, i);
+                                    property.search(form1.worksheet, i);
 
                                     k = 0;
                                 }

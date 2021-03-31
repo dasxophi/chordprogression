@@ -26,15 +26,17 @@ namespace chordprogression
                     {
                         //MessageBox.Show(j.ToString());
                         strtmp[k] = form1.worksheet.Cells[i, j].Value.ToString();
+                        strtmp[k] = strtmp[k].Replace('△', 'M');
+                        strtmp[k] = strtmp[k].Replace('-', 'b');
                         k++;
                     }
                     else if (form1.worksheet.Cells[i, j].Value == null) //nullのとき
                     {}
                 }
 
-                for (int m =ColumMax; m > 0; m--)
+                for (int m =ColumMax; m > 0; m--)　//m=32(最大)から1までngram実行
                 {
-                    n_gram(strtmp, i, ref FirstHM);
+                    //n_gram(strtmp, m, ref FirstHM);
                     k = 0;
                 }
             }
@@ -54,7 +56,7 @@ namespace chordprogression
 
         }
 
-        public List<string> n_gramDataBaseByN(Form1 form1, int N) //n=Nで分割
+        public List<string> n_gramDataBaseByN(Form1 form1, int N, ref List<int> CPnumber) //n=Nで分割
         {
             int ColumMax = form1.RangeColumsCount;
             int RowMax = form1.RangeRowsCount;
@@ -66,7 +68,7 @@ namespace chordprogression
             {
                 for (int j = 5; j <= ColumMax; j++)
                 {
-                    if (form1.worksheet.Cells[i, j].Value != null) //nullじゃないとき
+                    if (form1.worksheet.Cells[i, j].Value != null) //nullじゃないとき、i行の5列からstrtmpに入れていく
                     {
                         //MessageBox.Show(j.ToString());
                         strtmp[k] = form1.worksheet.Cells[i, j].Value.ToString();
@@ -74,15 +76,12 @@ namespace chordprogression
                         strtmp[k] = strtmp[k].Replace('-', 'b');
                         k++;
                     }
-                    else if (form1.worksheet.Cells[i, j].Value == null) //nullのとき
+                    else if (form1.worksheet.Cells[i, j].Value == null) //nullのときは何もしない
                     { }
                 }
-
-                for (int m = ColumMax; m > 0; m--)
-                {
-                    n_gram(strtmp, N, ref FirstHM);
-                    k = 0;
-                }
+                n_gram(strtmp, N, ref FirstHM, ref CPnumber, i); //Nでngram
+                k = 0;
+                
             }
 
             return FirstHM;
@@ -97,9 +96,9 @@ namespace chordprogression
 
 
 
-        public void n_gram(string[] src, int num, ref List<string> result) // numの分だけ分割(配列に対して)
+        public void n_gram(string[] src, int num, ref List<string> result, ref List<int> CPnumber, int row) // numの分だけ分割(配列に対して)
         {
-
+            
             string tmp;
             int n = num;
             Regex regex = new Regex(@"[a-z|A-Z|0-9]-$");
@@ -108,10 +107,16 @@ namespace chordprogression
                 tmp = src[i];
                 for (int j = 0; j < n - 1; j++)
                 {
-                    tmp += "-" + src[i + j + 1];
+                    tmp += "-" + src[i + j + 1];　
 
                 }
-                if(result.Contains(tmp) != true && tmp.Contains("--") != true && tmp != "-" && regex.IsMatch(tmp) != true) result.Add(tmp);
+                if(result.Contains(tmp) != true && tmp.Contains("--") != true && tmp != "-" && regex.IsMatch(tmp) != true)
+                {
+                    result.Add(tmp); //分割した文字列を-でつなげてresult(FirshHM)に追加
+                    CPnumber.Add(row); //そのコード進行が何番目の行からのコード進行なのかを記憶
+
+                }
+
             }
 
 

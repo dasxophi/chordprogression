@@ -501,8 +501,8 @@ namespace chordprogression
                                 double similarity = SimilarDegree(listToString, listToString2);
 
 
-                                Property property = new Property(ref genreProperty, ref artistDictionary);
-                                property.genresearch(worksheet,i);
+                                Property property = new Property(this);
+                                property.search(worksheet, i);
                                 string maingenreNew = property.maingenreDecide();
                                 /*genresearch(worksheet, i);
                                 string maingenreNew = maingenreDecide(); */

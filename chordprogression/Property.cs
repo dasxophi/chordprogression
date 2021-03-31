@@ -10,10 +10,8 @@ namespace chordprogression
 {
     class Property
     {
-        int[] genreProperty;
-        Dictionary<string, int> artistDictionary;
-
-        public void genresearch(ExcelWorksheet worksheet, int i)
+        Form1 form1;
+        private void genresearch(ExcelWorksheet worksheet, int i)
         {
             object genreName = worksheet.Cells[i, 1].Value.ToString();
             if (genreName != null)
@@ -21,16 +19,16 @@ namespace chordprogression
                 switch (genreName)
                 {
                     case "ポップ":
-                        genreProperty[0] += 1;
+                        form1.genreProperty[0] += 1;
                         break;
                     case "ロック":
-                        genreProperty[1] += 1;
+                        form1.genreProperty[1] += 1;
                         break;
                     case "バラード":
-                        genreProperty[2] += 1;
+                        form1.genreProperty[2] += 1;
                         break;
                     case "ボカロ":
-                        genreProperty[3] += 1;
+                        form1.genreProperty[3] += 1;
                         break;
                     default:
                         break;
@@ -40,14 +38,33 @@ namespace chordprogression
             }
         }
 
+       
+        private void artistsearch(ExcelWorksheet worksheet, int i)
+        {
+            object artistName = worksheet.Cells[i, 4].Value;
+            if (artistName != null)
+            {
+                if (form1.artistDictionary.ContainsKey(artistName.ToString()) == false)
+                {
+                    form1.artistDictionary.Add(artistName.ToString(), 1);
+                }
+                else
+                {
+                    int value = form1.artistDictionary[artistName.ToString()];
+                    value = value + 1;
+                    form1.artistDictionary.Remove(artistName.ToString());
+                    form1.artistDictionary.Add(artistName.ToString(), value);
+                }
 
+            }
+        }
         public string maingenreDecide()
         {
             int max = 0;
             int maxidx = 0;
-            for (int i = 0; i < genreProperty.Length; i++)
+            for (int i = 0; i < form1.genreProperty.Length; i++)
             {
-                int thisNum = genreProperty[i];
+                int thisNum = form1.genreProperty[i];
 
                 if (thisNum > max)
                 {
@@ -76,32 +93,39 @@ namespace chordprogression
             return maingenre;
         }
 
-        public void artistsearch(ExcelWorksheet worksheet, int i)
+        public void print()
         {
-            object artistName = worksheet.Cells[i, 4].Value;
-            if (artistName != null)
+            double allgenre = form1.genreProperty[0] + form1.genreProperty[1] + form1.genreProperty[2] + form1.genreProperty[3];
+
+            form1.richTextBox4.Clear();
+            form1.richTextBox4.AppendText("POP : " + Math.Truncate((form1.genreProperty[0] / allgenre) * 100.0 * 10) / 10 + "\n");
+            form1.richTextBox4.AppendText("ROCK : " + Math.Truncate((form1.genreProperty[1] / allgenre) * 100.0 * 10) / 10 + "\n");
+            form1.richTextBox4.AppendText("BALLAD : " + Math.Truncate((form1.genreProperty[2] / allgenre) * 100.0 * 10) / 10 + "\n");
+            form1.richTextBox4.AppendText("VOCALOID : " + Math.Truncate((form1.genreProperty[3] / allgenre) * 100.0 * 10) / 10 + "\n");
+            form1.maingenreNow = maingenreDecide();
+
+            form1.maingenreText.Text = "現在のコード進行は" + form1.maingenreNow + "寄りです";
+
+            form1.richTextBox5.Clear();
+            foreach (string name in form1.artistDictionary.Keys)
             {
-                if (artistDictionary.ContainsKey(artistName.ToString()) == false)
-                {
-                    artistDictionary.Add(artistName.ToString(), 1);
-                }
-                else
-                {
-                    int value = artistDictionary[artistName.ToString()];
-                    value = value + 1;
-                    artistDictionary.Remove(artistName.ToString());
-                    artistDictionary.Add(artistName.ToString(), value);
-                }
-
+                form1.richTextBox5.AppendText(name + "\n");
             }
+            form1.artistDictionary.Clear();
         }
 
-
-        public Property(ref int[] getgenreProperty, ref Dictionary<string, int> getartistDictionary)
+        public void search(ExcelWorksheet worksheet, int i)
         {
-            genreProperty = getgenreProperty;
-            artistDictionary = getartistDictionary;
+            genresearch(worksheet, i);
+            artistsearch(worksheet, i);
 
         }
+
+        
+        public Property(Form1 _form1)
+        {
+            form1 = _form1;
+        }
+
     }
 }
